@@ -26,9 +26,13 @@ fn main() -> Result<()> {
     open_skel.rodata().filter_by_port = !opts.port.is_empty();
 
     let mut skel = open_skel.load()?;
+    let mut maps = skel.maps_mut();
+    let map = maps.ports();
 
     if !opts.port.is_empty() {
+
         /* TODO:
+            map.update(key, value, flags)
             if (target_ports) {
             port_map_fd = bpf_map__fd(obj->maps.ports);
             port = strtok(target_ports, ",");
