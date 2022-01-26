@@ -2,3 +2,4 @@
 **/Cargo.lock
 **/src/bpf/vmlinux.h
 **/src/bpf/*.rs
+.vscode
