@@ -50,12 +50,12 @@ fn main() -> Result<()> {
     let mut skel = open_skel.load()?;
 
     if !opts.port.is_empty() {
-        for (i, value) in opts.port.iter().enumerate() {
-            let key = i.to_ne_bytes();
-            let value = value.to_ne_bytes();
+        for port in opts.port {
+            let key = (port as u16).to_ne_bytes();
+            let val = 1_u16.to_ne_bytes();
             skel.maps_mut()
                 .ports()
-                .update(&key, &value, MapFlags::ANY)?;
+                .update(&key, &val, MapFlags::ANY)?;
         }
     }
     skel.attach()?;

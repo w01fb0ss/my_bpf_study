@@ -105,6 +105,7 @@ static int probe_exit(struct pt_regs *ctx, short ver)
     sport = bpf_ntohs(BPF_CORE_READ(inet_sock, inet_sport));
     port = bpf_map_lookup_elem(&ports, &sport);
     if (filter_by_port && !port)
+        bpf_printk("%d", port);
         goto cleanup;
 
     opts.fields.freebind = BPF_CORE_READ_BITFIELD_PROBED(inet_sock, freebind);
@@ -131,7 +132,6 @@ static int probe_exit(struct pt_regs *ctx, short ver)
         bpf_probe_read_kernel(&event.addr, sizeof(event.addr), sock->__sk_common.skc_v6_rcv_saddr.in6_u.u6_addr32);
     }
     bpf_perf_event_output(ctx, &events, BPF_F_CURRENT_CPU, &event, sizeof(event));
-
 cleanup:
     bpf_map_delete_elem(&sockets, &tid);
     return 0;
