@@ -104,7 +104,7 @@ fn main() -> Result<()> {
         "{:8} {:8} {:6} {:16} {:6} {:6} {:3} {:}",
         "TIME", "TIME(s)", "UID", "PCOMM", "PID", "PPID", "RET", "ARGS"
     );
-    timer::TIMER.elapsed(); // To initialize static timer
+    let _ = timer::TIMER.elapsed(); // To initialize static timer
     let perf = PerfBufferBuilder::new(skel.maps().events())
         .sample_cb(handle_event)
         .lost_cb(handle_lost_events)

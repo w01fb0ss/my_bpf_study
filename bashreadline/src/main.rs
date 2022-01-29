@@ -64,6 +64,7 @@ fn handle_lost_events(cpu: i32, count: u64) {
     eprintln!("Lost {} events on CPU {}", count, cpu);
 }
 
+#[allow(clippy::print_literal)]
 fn main() -> Result<()> {
     let skel_builder = BashreadlineSkelBuilder::default();
     let open_skel = skel_builder.open()?;
@@ -86,7 +87,7 @@ fn main() -> Result<()> {
         .unwrap();
 
     println!("{:8} {:6} {:}", "TIME", "PID", "COMMAND");
-    timer::TIMER.elapsed();
+    let _ = timer::TIMER.elapsed();
     let perf = PerfBufferBuilder::new(skel.maps().events())
         .sample_cb(handle_event)
         .lost_cb(handle_lost_events)
