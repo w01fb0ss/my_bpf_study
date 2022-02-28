@@ -1,0 +1,19 @@
+[package]
+name = "xdp-ebpf"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+aya-bpf = { git = "http://github.com/aya-rs/aya", branch = "main" }
+xdp-common = { path = "../xdp-common" }
+memoffset = "0.6"
+
+[[bin]]
+name = "xdp"
+path = "src/main.rs"
+
+[profile.release]
+panic = "abort"
+
+[workspace]
+members = []
