@@ -1,0 +1,18 @@
+[package]
+name = "execsnoop-ebpf"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+aya-bpf = { git = "http://github.com/aya-rs/aya", branch = "main" }
+execsnoop-common = { path = "../execsnoop-common" }
+
+[[bin]]
+name = "execsnoop"
+path = "src/main.rs"
+
+[profile.release]
+panic = "abort"
+
+[workspace]
+members = []
