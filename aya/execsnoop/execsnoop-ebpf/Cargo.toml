@@ -6,6 +6,7 @@ edition = "2021"
 [dependencies]
 aya-bpf = { git = "http://github.com/aya-rs/aya", branch = "main" }
 execsnoop-common = { path = "../execsnoop-common" }
+memoffset = "0.6"
 
 [[bin]]
 name = "execsnoop"

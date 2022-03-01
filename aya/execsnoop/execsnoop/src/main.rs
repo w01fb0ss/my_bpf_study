@@ -29,9 +29,13 @@ async fn main() -> Result<(), anyhow::Error> {
     let mut bpf = Bpf::load(include_bytes_aligned!(
         "../../target/bpfel-unknown-none/release/execsnoop"
     ))?;
-    let program: &mut TracePoint = bpf.program_mut("execsnoop").unwrap().try_into()?;
+    let program: &mut TracePoint = bpf.program_mut("sys_enter_execve").unwrap().try_into()?;
     program.load()?;
     program.attach("syscalls", "sys_enter_execve")?;
+
+    let program: &mut TracePoint = bpf.program_mut("sys_exit_execve").unwrap().try_into()?;
+    program.load()?;
+    program.attach("syscalls", "sys_exit_execve")?;
 
     info!("Waiting for Ctrl-C...");
     signal::ctrl_c().await?;
