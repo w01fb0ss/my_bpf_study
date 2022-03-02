@@ -1,16 +1,20 @@
+use aya::maps::perf::AsyncPerfEventArray;
 use aya::programs::TracePoint;
+use aya::util::online_cpus;
 use aya::{include_bytes_aligned, Bpf};
+use bytes::BytesMut;
+use execsnoop_common::Event;
 use log::info;
 use simplelog::{ColorChoice, ConfigBuilder, LevelFilter, TermLogger, TerminalMode};
 use structopt::StructOpt;
-use tokio::signal;
+use tokio::{signal, task};
 
 #[derive(Debug, StructOpt)]
 struct Opt {}
 
 #[tokio::main]
 async fn main() -> Result<(), anyhow::Error> {
-    let opt = Opt::from_args();
+    let _opt = Opt::from_args();
 
     TermLogger::init(
         LevelFilter::Debug,
@@ -36,6 +40,27 @@ async fn main() -> Result<(), anyhow::Error> {
     let program: &mut TracePoint = bpf.program_mut("sys_exit_execve").unwrap().try_into()?;
     program.load()?;
     program.attach("syscalls", "sys_exit_execve")?;
+
+    let mut perf_array = AsyncPerfEventArray::try_from(bpf.map_mut("EVENTS")?)?;
+    for cpu_id in online_cpus()? {
+        let mut buf = perf_array.open(cpu_id, None)?;
+
+        task::spawn(async move {
+            let mut buffers = (0..10)
+                .map(|_| BytesMut::with_capacity(1024))
+                .collect::<Vec<_>>();
+
+            loop {
+                let events = buf.read_events(&mut buffers).await.unwrap();
+                for i in 0..events.read {
+                    let buf = &mut buffers[i];
+                    let ptr = buf.as_ptr() as *const Event;
+                    let data = unsafe { ptr.read_unaligned() };
+                    println!("{:?}", data);
+                }
+            }
+        });
+    }
 
     info!("Waiting for Ctrl-C...");
     signal::ctrl_c().await?;

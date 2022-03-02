@@ -1,17 +1,17 @@
 #![no_std]
 
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, Debug)]
 #[repr(C)]
 pub struct Event {
-    pub comm: [u8; 16],
-    pub pid: i32,
-    pub tgid: i32,
-    pub ppid: i32,
-    pub uid: i32,
+    pub comm: [i8; 16],
+    pub pid: u64,
+    pub tgid: u64,
+    pub ppid: u64,
+    pub uid: u64,
     pub retval: i32,
     pub args_count: i32,
     pub args_size: u32,
-    pub args: [u8; 128 * 60],
+    pub args: [u8; 128 * 20],
 }
 
 #[cfg(feature = "user")]

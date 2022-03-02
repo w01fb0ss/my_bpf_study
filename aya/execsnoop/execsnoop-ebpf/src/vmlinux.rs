@@ -23660,6 +23660,22 @@ pub struct rt_mutex {
     pub owner: *mut task_struct,
 }
 #[repr(C)]
+#[derive(Debug)]
+pub struct trace_event_raw_sys_enter {
+    pub ent: trace_entry,
+    pub id: ::aya_bpf::cty::c_long,
+    pub args: [::aya_bpf::cty::c_ulong; 6usize],
+    pub __data: __IncompleteArrayField<::aya_bpf::cty::c_char>,
+}
+#[repr(C)]
+#[derive(Debug)]
+pub struct trace_event_raw_sys_exit {
+    pub ent: trace_entry,
+    pub id: ::aya_bpf::cty::c_long,
+    pub ret: ::aya_bpf::cty::c_long,
+    pub __data: __IncompleteArrayField<::aya_bpf::cty::c_char>,
+}
+#[repr(C)]
 #[derive(Copy, Clone)]
 pub union futex_key {
     pub shared: futex_key__bindgen_ty_1,
