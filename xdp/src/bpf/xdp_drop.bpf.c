@@ -39,12 +39,9 @@ int xdp_drop_icmp(struct xdp_md *ctx)
 
     struct iphdr *ip = data + sizeof(struct ethhdr);
     if ((void *)(ip + 1) > data_end)
-		return XDP_PASS;
+	return XDP_PASS;
     if (ip->protocol == IPPROTO_ICMP)
-    {
-        // bpf_printk("PING");
 	return XDP_DROP;
-    }
 
     return XDP_PASS;
 }
