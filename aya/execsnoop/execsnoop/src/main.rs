@@ -8,7 +8,7 @@ use log::info;
 use simplelog::{ColorChoice, ConfigBuilder, LevelFilter, TermLogger, TerminalMode};
 use structopt::StructOpt;
 use tokio::{signal, task};
-// git
+
 #[derive(Debug, StructOpt)]
 struct Opt {}
 
