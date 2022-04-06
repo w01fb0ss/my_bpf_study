@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "ptrace.h": "c",
+        "blkdev.h": "c",
+        "sched.h": "c",
+        "blk-mq.h": "c"
+    }
+}
